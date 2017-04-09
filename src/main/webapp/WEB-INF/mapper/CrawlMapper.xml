@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.pandy.dao.CrawlDao">
+
+    <insert id="insert" parameterType="cn.pandy.pojo.RentingInfoObj">
+        INSERT INTO t_crawl(
+        <if test="hashId != null">hashId,</if>
+        <if test="titleName != null">titleName,</if>
+        <if test="href != null">href,</if>
+        <if test="roomSize != null">roomSize,</if>
+        <if test="address != null">address,</if>
+        <if test="geren != null">geren,</if>
+        <if test="sendTime != null">sendTime,</if>
+        <if test="money != null">money,</if>
+        <if test="updateTime != null">updateTime,</if>
+        createTime)
+        VALUES(
+        <if test="hashId != null">#{hashId},</if>
+        <if test="titleName != null">#{titleName},</if>
+        <if test="href != null">#{href},</if>
+        <if test="roomSize != null">#{roomSize},</if>
+        <if test="address != null">#{address},</if>
+        <if test="geren != null">#{geren},</if>
+        <if test="sendTime != null">#{sendTime},</if>
+        <if test="money != null">#{money},</if>
+        <if test="updateTime != null">#{updateTime},</if>
+        CURRENT_TIMESTAMP )
+    </insert>
+
+    <select id="query" resultType="cn.pandy.pojo.RentingInfoObj" parameterType="Map">
+        SELECT * FROM t_crawl
+        where 1=1
+        <if test="address != null and address != ''">and address LIKE "%${address}%"</if>
+        <if test="moneyStart !=null and moneyStart !=''">AND money &gt;= #{moneyStart}</if>
+        <if test="moneyEnd !=null and moneyEnd !='' ">AND money &lt;= #{moneyEnd} </if>
+        <if test="sendTimeStart !=null and sendTimeStart !='' ">AND sendTime &gt;= #{sendTimeStart} </if>
+        <if test="sendTimeEnd !=null and sendTimeEnd !='' ">AND sendTime &lt;= #{sendTimeEnd} </if>
+        <if test="orderSql !=null and orderSql != ''">${orderSql}</if>
+        LIMIT ${start},${end}
+    </select>
+
+    <select id="queryCount" resultType="int" parameterType="Map">
+            SELECT COUNT(1) FROM t_crawl
+        where 1=1
+        <if test="address != null and address != ''">and address LIKE "%${address}%"</if>
+        <if test="moneyStart !=null and moneyStart !=''">AND money &gt;= #{moneyStart}</if>
+        <if test="moneyEnd !=null and moneyEnd !='' ">AND money &lt;= #{moneyEnd} </if>
+        <if test="sendTimeStart !=null and sendTimeStart !='' ">AND sendTime &gt;= #{sendTimeStart} </if>
+        <if test="sendTimeEnd !=null and sendTimeEnd !='' ">AND sendTime &lt;= #{sendTimeEnd} </if>
+        <if test="orderSql !=null and orderSql != ''">${orderSql}</if>
+    </select>
+
+    <select id="queryHashId" resultType="String" parameterType="int">
+        SELECT hashId FROM t_crawl ORDER BY updateTime DESC LIMIT ${start},${end}
+    </select>
+
+
+</mapper>
